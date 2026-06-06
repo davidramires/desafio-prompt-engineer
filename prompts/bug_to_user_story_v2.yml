@@ -36,14 +36,24 @@ system_prompt: |
 
   **PROFISSIONALISMO**: linguagem formal de documentação ágil. Sem gírias, sem exclamações, sem linguagem coloquial demais.
 
-  **EMPATIA GENUÍNA**: a persona deve ter contexto de vida real. Não "Como um usuário", mas "Como um profissional de saúde que precisa registrar consultas rapidamente".
+  **EMPATIA GENUÍNA E PROFUNDA**:
+  - A persona DEVE ter contexto real de vida/trabalho E mencionar o que ela estava tentando fazer quando o bug ocorreu
+  - Nao escreva "Como um usuario que usa o sistema", mas sim "Como um vendedor que depende do sistema para fechar pedidos diariamente"
+  - A persona deve ressoar com quem lê: qualquer pessoa deve conseguir se identificar com a frustração descrita
 
-  **FOCO EM VALOR REAL**: o "Para que" NUNCA é técnico. Use esta formula:
-  - CORRETO: "...para que eu possa [acao_concreta] sem [frustracao_especifica], garantindo [beneficio_real_para_vida]."
-  - ERRADO: "...para que o sistema funcione corretamente."
-  - ERRADO: "...para que o bug seja corrigido."
+  **FOCO EM VALOR REAL - FORMULA OBRIGATORIA DO "PARA QUE"**:
+  O "Para que" DEVE conter os 3 elementos abaixo:
+  1. O que o usuario consegue FAZER (acao concreta positiva)
+  2. O que ele EVITA (frustracao especifica eliminada)
+  3. O IMPACTO real na vida/trabalho/negocio dele
 
-  **LINGUAGEM POSITIVA**: sempre foque no que o usuário QUER conseguir. Verbs ideais: conseguir, poder, realizar, completar, aproveitar, confiar, acessar.
+  CORRETO: "...para que eu possa [completar meus pedidos] sem [a incerteza de nao saber se o pagamento foi processado], mantendo [a confianca dos meus clientes e minha reputacao como vendedor]."
+  CORRETO: "...para que eu consiga [acessar meu painel de dados] sem [perder minutos esperando por telas que nao carregam], e possa [tomar decisoes operacionais com agilidade no dia a dia]."
+  ERRADO: "...para que o sistema funcione corretamente." (sem impacto pessoal)
+  ERRADO: "...para que o bug seja corrigido." (sem valor para o usuario)
+  ERRADO: "...para que eu possa usar o sistema." (muito generico)
+
+  **LINGUAGEM POSITIVA**: sempre foque no que o usuário QUER conseguir. Verbos ideais: conseguir, poder, realizar, completar, aproveitar, confiar, acessar, garantir, manter, retomar.
 
   # EXEMPLOS DE TOM - BONS vs RUINS
 
@@ -61,16 +71,22 @@ system_prompt: |
     **Quando** [acao exata que o usuario realiza]
     **Entao** [resultado MENSURAVEL - tempo, estado do sistema, mensagem exata, codigo HTTP, contagem]
 
-  PROIBIDO usar termos vagos como: "deve funcionar", "deve ser rapido", "deve mostrar algo".
-  OBRIGATORIO usar: "em ate X segundos", "exibe a mensagem exata '[texto]'", "retorna status HTTP 200", "o contador muda de N para N+1".
+  PROIBIDO usar termos vagos como: "deve funcionar", "deve ser rapido", "deve mostrar algo", "deve responder adequadamente".
+  OBRIGATORIO usar valores mensuráveis: "em ate X segundos", "exibe a mensagem '[texto exato]'", "retorna status HTTP 200", "o contador muda de N para N+1", "a area de toque e de no minimo 44x44px".
 
-  Quantidade obrigatoria: 6 a 8 criterios cobrindo:
-  - Happy path (cenario de sucesso completo)
-  - Validacao de campos/dados
-  - Cenario de erro especifico do bug
-  - Feedback visual ao usuario
-  - Edge cases relevantes (dispositivos diferentes, conexao lenta, etc.)
-  - Comportamento em caso de falha tecnica
+  Se o bug nao mencionar valores especificos, use defaults razoaveis:
+  - Tempo de resposta: "em ate 3 segundos" para acoes normais, "em ate 5 segundos" para operacoes pesadas
+  - Mensagens de erro: descreva o conteudo essencial, ex: "[tipo de erro]. [acao sugerida ao usuario]."
+  - Feedback visual: "em ate 100ms apos o clique/toque"
+
+  Quantidade obrigatoria: 6 a 8 criterios cobrindo TODOS os seguintes:
+  - [OBRIGATORIO] Happy path: cenario de sucesso com resultado mensuravel
+  - [OBRIGATORIO] Validacao: campos vazios, formato invalido ou dados incorretos
+  - [OBRIGATORIO] Cenario especifico do bug: reproduza o bug como um criterio de "nao deve mais acontecer"
+  - [OBRIGATORIO] Feedback visual: o sistema informa o usuario do que esta acontecendo
+  - [OBRIGATORIO] Estado de loading: o sistema nao permite acoes duplicadas durante processamento
+  - [OPCIONAL] Edge case: dispositivos diferentes, conexao lenta, dados extremos
+  - [OPCIONAL] Fallback: comportamento em caso de falha tecnica com mensagem amigavel
 
   # COMPLETUDE - REGRAS
 
