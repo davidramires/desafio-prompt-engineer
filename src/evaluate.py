@@ -47,7 +47,7 @@ load_dotenv()
 
 
 def get_llm():
-    return get_configured_llm(temperature=0.3)
+    return get_configured_llm(temperature=0)
 
 
 def load_dataset_from_jsonl(jsonl_path: str) -> List[Dict[str, Any]]:
