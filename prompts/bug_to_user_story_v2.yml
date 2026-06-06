@@ -57,11 +57,15 @@ system_prompt: |
   2. O que ele EVITA (frustracao especifica eliminada)
   3. O IMPACTO real na vida/trabalho/negocio dele
 
-  CORRETO: "...para que eu possa [completar meus pedidos] sem [a incerteza de nao saber se o pagamento foi processado], mantendo [a confianca dos meus clientes e minha reputacao como vendedor]."
-  CORRETO: "...para que eu consiga [acessar meu painel de dados] sem [perder minutos esperando por telas que nao carregam], e possa [tomar decisoes operacionais com agilidade no dia a dia]."
+  ESTRUTURA OBRIGATORIA DO "PARA QUE" (3 elementos em sequencia):
+  "Para que eu possa [ACAO CONCRETA], sem [FRUSTRACAO ESPECIFICA ELIMINADA], [garantindo/mantendo/e possa] [RESULTADO DE NEGOCIO OU IMPACTO NA VIDA]."
+
+  CORRETO: "...para que eu possa completar meus pedidos sem a incerteza de nao saber se o pagamento foi processado, mantendo a confianca dos meus clientes e minha reputacao como vendedor."
+  CORRETO: "...para que eu consiga acessar meu painel de dados sem perder minutos esperando por telas que nao carregam, e possa tomar decisoes operacionais com agilidade no dia a dia."
+  CORRETO: "...para que eu possa cadastrar minha conta corretamente na primeira tentativa, sem perder o acesso por um email invalido que passei desapercebido, garantindo que recebo todas as notificacoes e comunicacoes importantes do sistema."
   ERRADO: "...para que o sistema funcione corretamente." (sem impacto pessoal)
   ERRADO: "...para que o bug seja corrigido." (sem valor para o usuario)
-  ERRADO: "...para que eu possa usar o sistema." (muito generico)
+  ERRADO: "...para que eu possa usar o sistema." (muito generico, sem os 3 elementos)
 
   **LINGUAGEM POSITIVA**: sempre foque no que o usuário QUER conseguir. Verbos ideais: conseguir, poder, realizar, completar, aproveitar, confiar, acessar, garantir, manter, retomar.
 
@@ -84,7 +88,7 @@ system_prompt: |
 
   **Como um** cliente que encontrou o produto ID 1234 que procurava e estava prestes a finalizar uma compra importante, mas ao clicar em "Adicionar ao Carrinho" nao obteve nenhuma resposta do sistema,
   **Eu quero** conseguir adicionar o produto ID 1234 ao meu carrinho com um unico clique, recebendo confirmacao imediata de que o item foi reservado para mim,
-  **Para que** eu possa prosseguir com minha compra com confianca, sem o risco de perder o produto desejado por nao conseguir incluir no carrinho, e sem precisar tentar varias vezes sem saber se o sistema esta funcionando.
+  **Para que** eu possa prosseguir com minha compra com confianca, sem o risco de perder o produto desejado por nao conseguir adicionar ao carrinho, garantindo que finalizarei meu pedido sem depender de tentativas repetidas sem feedback do sistema.
 
   ## Criterios de Aceitacao
 
@@ -442,7 +446,7 @@ examples:
 
       **Como um** cliente que encontrou o produto ID 1234 que procurava e estava prestes a finalizar uma compra importante, mas ao clicar em "Adicionar ao Carrinho" nao obteve nenhuma resposta do sistema,
       **Eu quero** conseguir adicionar o produto ID 1234 ao meu carrinho com um unico clique, recebendo confirmacao imediata de que o item foi reservado para mim,
-      **Para que** eu possa prosseguir com minha compra com confianca, sem o risco de perder o produto desejado por nao conseguir incluir no carrinho, e sem precisar tentar varias vezes sem saber se o sistema esta funcionando.
+      **Para que** eu possa prosseguir com minha compra com confianca, sem o risco de perder o produto desejado por nao conseguir adicionar ao carrinho, garantindo que finalizarei meu pedido sem depender de tentativas repetidas sem feedback do sistema.
 
       ## Criterios de Aceitacao
 
