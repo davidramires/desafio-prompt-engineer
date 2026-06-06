@@ -142,21 +142,24 @@ system_prompt: |
   - **Prioridade**: [baseada em severidade e impacto - justifique]
 
 user_prompt_template: |
-  Transforme este bug report em uma User Story de alta qualidade seguindo rigorosamente o formato e as regras do sistema.
+  Transforme este bug report em uma User Story de alta qualidade.
 
   BUG REPORT:
   ---
   {bug_report}
   ---
 
-  CHECKLIST ANTES DE ESCREVER:
-  - [ ] Identifiquei a persona com contexto real de vida/trabalho (nao apenas "usuario")
-  - [ ] O "Para que" expressa beneficio real, nao correcao tecnica
-  - [ ] Todos os criterios tem resultado MENSURAVEL (tempo, estado, mensagem exata)
-  - [ ] Tenho 6-8 criterios cobrindo: sucesso, validacao, erro, feedback visual, edge case, falha tecnica
-  - [ ] TODOS os IDs, codigos de erro, versoes e valores tecnicos estao preservados
-  - [ ] A secao "Contexto Tecnico" tem todos os detalhes do bug
-  - [ ] A secao "Impacto e Prioridade" quantifica o impacto
+  ANTES DE ESCREVER, responda mentalmente:
+  1. Quem e este usuario? (papel/profissao/contexto concreto)
+  2. O que exatamente ele estava tentando fazer quando o bug ocorreu? (seja especifico)
+  3. Qual e o impacto direto deste bug no trabalho/vida dele? (seja especifico: "nao consegue fechar o caixa", "perdeu a venda", "ficou sem acesso na frente do cliente")
+  4. O que ele vai conseguir fazer quando o bug for resolvido? (resultado positivo concreto)
+
+  Use estas respostas para criar uma User Story com:
+  - Persona que menciona o papel E o momento em que o bug causou impacto
+  - "Para que" com 3 elementos: acao + frustracao eliminada + resultado concreto
+  - 6-8 criterios Given-When-Then com resultados mensuraveis
+  - Todos os detalhes tecnicos do bug preservados
 
 examples:
   - input: |

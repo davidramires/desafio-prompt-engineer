@@ -1,4 +1,4 @@
-"""
+﻿"""
 Script COMPLETO para avaliar prompts otimizados.
 
 Este script:
@@ -47,7 +47,7 @@ load_dotenv()
 
 
 def get_llm():
-    return get_configured_llm(temperature=0)
+    return get_configured_llm(temperature=0.3)
 
 
 def load_dataset_from_jsonl(jsonl_path: str) -> List[Dict[str, Any]]:
@@ -64,14 +64,14 @@ def load_dataset_from_jsonl(jsonl_path: str) -> List[Dict[str, Any]]:
         return examples
 
     except FileNotFoundError:
-        print(f"❌ Arquivo não encontrado: {jsonl_path}")
+        print(f"[ERRO] Arquivo não encontrado: {jsonl_path}")
         print("\nCertifique-se de que o arquivo datasets/bug_to_user_story.jsonl existe.")
         return []
     except json.JSONDecodeError as e:
-        print(f"❌ Erro ao parsear JSONL: {e}")
+        print(f"[ERRO] Erro ao parsear JSONL: {e}")
         return []
     except Exception as e:
-        print(f"❌ Erro ao carregar dataset: {e}")
+        print(f"[ERRO] Erro ao carregar dataset: {e}")
         return []
 
 
@@ -81,10 +81,10 @@ def create_evaluation_dataset(client: Client, dataset_name: str, jsonl_path: str
     examples = load_dataset_from_jsonl(jsonl_path)
 
     if not examples:
-        print("❌ Nenhum exemplo carregado do arquivo .jsonl")
+        print("[ERRO] Nenhum exemplo carregado do arquivo .jsonl")
         return dataset_name
 
-    print(f"   ✓ Carregados {len(examples)} exemplos do arquivo {jsonl_path}")
+    print(f"   [OK] Carregados {len(examples)} exemplos do arquivo {jsonl_path}")
 
     try:
         datasets = client.list_datasets(dataset_name=dataset_name)
@@ -96,7 +96,7 @@ def create_evaluation_dataset(client: Client, dataset_name: str, jsonl_path: str
                 break
 
         if existing_dataset:
-            print(f"   ✓ Dataset '{dataset_name}' já existe, usando existente")
+            print(f"   [OK] Dataset '{dataset_name}' já existe, usando existente")
             return dataset_name
         else:
             dataset = client.create_dataset(dataset_name=dataset_name)
@@ -108,11 +108,11 @@ def create_evaluation_dataset(client: Client, dataset_name: str, jsonl_path: str
                     outputs=example["outputs"]
                 )
 
-            print(f"   ✓ Dataset criado com {len(examples)} exemplos")
+            print(f"   [OK] Dataset criado com {len(examples)} exemplos")
             return dataset_name
 
     except Exception as e:
-        print(f"   ⚠️  Erro ao criar dataset: {e}")
+        print(f"   [AVISO]  Erro ao criar dataset: {e}")
         return dataset_name
 
 
@@ -121,18 +121,18 @@ def pull_prompt_from_langsmith(prompt_name: str) -> ChatPromptTemplate:
         print(f"   Puxando prompt do LangSmith Hub: {prompt_name}")
         client = Client()
         prompt = client.pull_prompt(prompt_name)
-        print(f"   ✓ Prompt carregado com sucesso")
+        print(f"   [OK] Prompt carregado com sucesso")
         return prompt
 
     except Exception as e:
         error_msg = str(e).lower()
 
         print(f"\n{'=' * 70}")
-        print(f"❌ ERRO: Não foi possível carregar o prompt '{prompt_name}'")
+        print(f"[ERRO] ERRO: Não foi possível carregar o prompt '{prompt_name}'")
         print(f"{'=' * 70}\n")
 
         if "not found" in error_msg or "404" in error_msg:
-            print("⚠️  O prompt não foi encontrado no LangSmith Hub.\n")
+            print("[AVISO]  O prompt não foi encontrado no LangSmith Hub.\n")
             print("AÇÕES NECESSÁRIAS:")
             print("1. Verifique se você já fez push do prompt otimizado:")
             print(f"   python src/push_prompts.py")
@@ -183,7 +183,7 @@ def evaluate_prompt_on_example(
         }
 
     except Exception as e:
-        print(f"      ⚠️  Erro ao avaliar exemplo: {e}")
+        print(f"      [AVISO]  Erro ao avaliar exemplo: {e}")
         import traceback
         print(f"      Traceback: {traceback.format_exc()}")
         return {
@@ -199,7 +199,7 @@ def evaluate_prompt(
     client: Client,
     sample_size: int = None
 ) -> Dict[str, float]:
-    print(f"\n🔍 Avaliando: {prompt_name}")
+    print(f"\n Avaliando: {prompt_name}")
 
     try:
         prompt_template = pull_prompt_from_langsmith(prompt_name)
@@ -259,7 +259,7 @@ def evaluate_prompt(
         }
 
     except Exception as e:
-        print(f"   ❌ Erro na avaliação: {e}")
+        print(f"   [ERRO] Erro na avaliação: {e}")
         return {
             "tone_score": 0.0,
             "acceptance_criteria_score": 0.0,
@@ -276,9 +276,9 @@ def display_results(prompt_name: str, scores: Dict[str, float], previous_evaluat
     # Mostrar número da iteração
     history = load_evaluation_history()
     current_iteration = len(history) + 1
-    print(f"\n🔄 Iteração: #{current_iteration}")
+    print(f"\n Iteração: #{current_iteration}")
 
-    print("\n📊 Métricas Bug to User Story (Critério de Aprovação):")
+    print("\n Métricas Bug to User Story (Critério de Aprovação):")
     print(f"  - Tone Score: {format_score(scores['tone_score'], threshold=0.9)}")
     print(f"  - Acceptance Criteria Score: {format_score(scores['acceptance_criteria_score'], threshold=0.9)}")
     print(f"  - User Story Format Score: {format_score(scores['user_story_format_score'], threshold=0.9)}")
@@ -290,23 +290,23 @@ def display_results(prompt_name: str, scores: Dict[str, float], previous_evaluat
     all_metrics_pass = all(score >= 0.9 for score in scores.values())
 
     print("\n" + "-" * 50)
-    print(f"📊 MÉDIA DAS 4 MÉTRICAS: {average_score:.4f}")
+    print(f" MÉDIA DAS 4 MÉTRICAS: {average_score:.4f}")
     print("-" * 50)
 
     # IMPORTANTE: Todas as 4 métricas devem estar >= 0.9
     if all_metrics_pass and average_score >= 0.9:
-        print(f"\n✅ STATUS: APROVADO")
-        print(f"   ✓ Todas as 4 métricas >= 0.9")
-        print(f"   ✓ Média >= 0.9")
+        print(f"\n[APROVADO] STATUS: APROVADO")
+        print(f"   [OK] Todas as 4 métricas >= 0.9")
+        print(f"   [OK] Média >= 0.9")
     else:
-        print(f"\n❌ STATUS: REPROVADO")
+        print(f"\n[ERRO] STATUS: REPROVADO")
         if not all_metrics_pass:
-            print(f"   ⚠️  Nem todas as métricas estão >= 0.9:")
+            print(f"   [AVISO]  Nem todas as métricas estão >= 0.9:")
             for name, score in scores.items():
                 if score < 0.9:
                     print(f"      - {name}: {score:.4f} (precisa >= 0.9)")
         if average_score < 0.9:
-            print(f"   ⚠️  Média atual: {average_score:.4f} | Necessário: >= 0.9")
+            print(f"   [AVISO]  Média atual: {average_score:.4f} | Necessário: >= 0.9")
 
     # Mostrar comparação com avaliação anterior
     print_evaluation_comparison(scores, previous_evaluation)
@@ -325,10 +325,10 @@ def main():
     history = load_evaluation_history()
 
     if previous_evaluation:
-        print(f"📜 Histórico: {len(history)} avaliações anteriores")
+        print(f" Histórico: {len(history)} avaliações anteriores")
         print(f"   Última iteração: #{previous_evaluation.get('iteration', '?')}")
     else:
-        print("📜 Histórico: Nenhuma avaliação anterior encontrada")
+        print(" Histórico: Nenhuma avaliação anterior encontrada")
 
     print()
 
@@ -360,7 +360,7 @@ def main():
     jsonl_path = "datasets/bug_to_user_story.jsonl"
 
     if not Path(jsonl_path).exists():
-        print(f"❌ Arquivo de dataset não encontrado: {jsonl_path}")
+        print(f"[ERRO] Arquivo de dataset não encontrado: {jsonl_path}")
         print("\nCertifique-se de que o arquivo existe antes de continuar.")
         return 1
 
@@ -402,10 +402,10 @@ def main():
 
             # Salvar resultado no histórico
             save_evaluation_result(result_data)
-            print(f"\n💾 Resultado salvo no histórico (evaluations/history.json)")
+            print(f"\n Resultado salvo no histórico (evaluations/history.json)")
 
         except Exception as e:
-            print(f"\n❌ Falha ao avaliar '{prompt_name}': {e}")
+            print(f"\n[ERRO] Falha ao avaliar '{prompt_name}': {e}")
             all_passed = False
 
             error_result = {
@@ -424,19 +424,19 @@ def main():
 
             # Salvar mesmo resultados com erro
             save_evaluation_result(error_result)
-            print(f"\n💾 Resultado (com erro) salvo no histórico")
+            print(f"\n Resultado (com erro) salvo no histórico")
 
     print("\n" + "=" * 50)
     print("RESUMO FINAL")
     print("=" * 50 + "\n")
 
     if evaluated_count == 0:
-        print("⚠️  Nenhum prompt foi avaliado")
+        print("[AVISO]  Nenhum prompt foi avaliado")
         return 1
 
     # Mostrar total de iterações
     total_iterations = len(load_evaluation_history())
-    print(f"📊 Total de iterações realizadas: {total_iterations}")
+    print(f" Total de iterações realizadas: {total_iterations}")
     print(f"   (Esperado: 3-5 iterações para atingir >= 0.9)\n")
 
     print(f"Prompts avaliados: {evaluated_count}")
@@ -446,16 +446,16 @@ def main():
     fim = datetime.now()
     elapsed = fim - inicio
     minutos, segundos = divmod(int(elapsed.total_seconds()), 60)
-    print(f"⏱️  Tempo total de avaliação: {minutos}m {segundos}s\n")
+    print(f"  Tempo total de avaliação: {minutos}m {segundos}s\n")
 
     if all_passed:
-        print("✅ Todos os prompts atingiram as 4 métricas >= 0.9!")
+        print("[APROVADO] Todos os prompts atingiram as 4 métricas >= 0.9!")
         print("\n   Critérios de Aprovação Atingidos:")
-        print("   ✓ Tone Score >= 0.9")
-        print("   ✓ Acceptance Criteria Score >= 0.9")
-        print("   ✓ User Story Format Score >= 0.9")
-        print("   ✓ Completeness Score >= 0.9")
-        print(f"\n✓ Confira os resultados em:")
+        print("   [OK] Tone Score >= 0.9")
+        print("   [OK] Acceptance Criteria Score >= 0.9")
+        print("   [OK] User Story Format Score >= 0.9")
+        print("   [OK] Completeness Score >= 0.9")
+        print(f"\n[OK] Confira os resultados em:")
         print(f"  https://smith.langchain.com/projects/{project_name}")
         print("\nPróximos passos:")
         print("1. Documente o processo no README.md")
@@ -463,7 +463,7 @@ def main():
         print("3. Faça commit e push para o GitHub")
         return 0
     else:
-        print("⚠️  Alguns prompts não atingiram todas as 4 métricas >= 0.9")
+        print("[AVISO]  Alguns prompts não atingiram todas as 4 métricas >= 0.9")
         print("\n   Critérios de Aprovação (TODAS devem ser >= 0.9):")
         print("   - Tone Score")
         print("   - Acceptance Criteria Score")
