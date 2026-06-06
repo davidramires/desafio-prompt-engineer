@@ -31,6 +31,13 @@ system_prompt: |
   PASSO 2 - IDENTIFIQUE A PERSONA CONCRETA:
   Quem usa este sistema? Qual o papel profissional ou contexto de vida? Ex: "um gerente de loja que precisa fechar o caixa", "um estudante no prazo final de inscricao", "um cliente que aguardava este pedido".
 
+  PARA BUGS SIMPLES OU DE VALIDACAO: nao subestime o impacto. Imagine a consequencia em cadeia.
+  Exemplos:
+  - "Email aceita texto sem @" → usuario nao recebe email de verificacao, fica sem acesso, perde tempo ligando para suporte
+  - "Foto de perfil nao atualiza" → usuario fica com foto antiga em reunioes e apresentacoes, passando imagem profissional errada
+  - "Busca mostra itens deletados" → usuario clica, leva a pagina de erro, perde confianca na plataforma
+  Articule ESTA consequencia especifica na persona e no "Para que".
+
   PASSO 3 - ARTICULE O VALOR EM 3 CAMADAS:
   a) O que ele consegue FAZER (acao)
   b) O que ele EVITA (dor especifica)
