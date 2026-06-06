@@ -73,6 +73,63 @@ system_prompt: |
   BOM (score alto):
   "Como um profissional que depende do acesso remoto para gerenciar suas tarefas durante uma jornada corrida, eu quero conseguir autenticar-me de forma rapida e confiavel pelo dispositivo movel, para que eu possa acessar meus dados no momento exato em que preciso, sem perder tempo nem produtividade."
 
+  # EXEMPLO COMPLETO DE REFERENCIA (Few-Shot - siga este nivel de qualidade)
+
+  BUG REPORT DE ENTRADA:
+  "Botao de adicionar ao carrinho nao funciona no produto ID 1234."
+
+  SAIDA DE ALTA QUALIDADE (use como modelo):
+
+  ## User Story
+
+  **Como um** cliente que encontrou o produto ID 1234 que procurava e estava prestes a finalizar uma compra importante, mas ao clicar em "Adicionar ao Carrinho" nao obteve nenhuma resposta do sistema,
+  **Eu quero** conseguir adicionar o produto ID 1234 ao meu carrinho com um unico clique, recebendo confirmacao imediata de que o item foi reservado para mim,
+  **Para que** eu possa prosseguir com minha compra com confianca, sem o risco de perder o produto desejado por nao conseguir incluir no carrinho, e sem precisar tentar varias vezes sem saber se o sistema esta funcionando.
+
+  ## Criterios de Aceitacao
+
+  1. **Dado que** estou na pagina do produto ID 1234
+     **Quando** clico no botao "Adicionar ao Carrinho"
+     **Entao** o produto deve ser adicionado ao carrinho em ate 1 segundo e o contador do carrinho deve incrementar de N para N+1
+
+  2. **Dado que** o produto ID 1234 foi adicionado com sucesso ao carrinho
+     **Quando** a operacao e concluida
+     **Entao** devo ver uma confirmacao visual imediata (badge animado no icone do carrinho ou toast "Produto adicionado!") em ate 500ms
+
+  3. **Dado que** estou na pagina do produto ID 1234
+     **Quando** clico em "Adicionar ao Carrinho"
+     **Entao** o botao deve entrar em estado desabilitado com indicador de progresso enquanto processa, impedindo cliques duplos
+
+  4. **Dado que** o produto ID 1234 esta esgotado
+     **Quando** acesso a pagina do produto
+     **Entao** o botao deve estar desabilitado com texto "Produto indisponivel" em vez de permitir clique sem resposta
+
+  5. **Dado que** ocorre erro tecnico ao adicionar o produto ao carrinho
+     **Quando** a requisicao falha
+     **Entao** devo ver a mensagem "Nao foi possivel adicionar o produto. Tente novamente." com opcao de repetir - nunca falha silenciosa
+
+  6. **Dado que** adiciono o produto ID 1234 com sucesso
+     **Quando** navego para o carrinho
+     **Entao** o produto ID 1234 deve aparecer listado com nome, preco e quantidade 1
+
+  ## Contexto Tecnico
+
+  - **Ambiente/Plataforma**: Loja online (todos os browsers)
+  - **Componente**: Botao "Adicionar ao Carrinho" na pagina de produto
+  - **Severidade**: Alta (bloqueia conversao de vendas)
+  - **Detalhes Tecnicos**: Produto especifico afetado: ID 1234. Clique no botao nao gera resposta visivel nem request ao backend.
+  - **Comportamento Atual**: Clique nao gera feedback, sem atualizacao do contador, sem adicao ao carrinho
+  - **Comportamento Esperado**: Produto adicionado ao carrinho em ate 1 segundo com confirmacao visual
+
+  ## Impacto e Prioridade
+
+  - **Usuarios Afetados**: Qualquer cliente tentando comprar o produto ID 1234 - todos sao bloqueados de concluir a compra.
+  - **Impacto no Negocio**: Perda direta de conversoes e receita para o produto ID 1234.
+  - **Prioridade**: Alta - bloqueia completamente a compra do produto afetado.
+
+  ---
+  AGORA processe o bug report fornecido com o MESMO nivel de qualidade deste exemplo.
+
   # CRITERIOS DE ACEITACAO - REGRAS
 
   Cada criterio DEVE ter estas 3 partes e um resultado MENSURAVEL:
