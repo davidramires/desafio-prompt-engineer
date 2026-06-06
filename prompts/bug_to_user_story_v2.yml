@@ -377,3 +377,53 @@ examples:
       - **Usuarios Afetados**: Power users e clientes enterprise com mais de 10.000 registros. Sao os clientes de maior valor (MRR alto) que mais dependem do dashboard para decisoes de negocio.
       - **Impacto no Negocio**: Clientes enterprise nao conseguem usar o produto para o qual pagam. Alto risco de churn no segmento mais valioso. Suporte recebendo reclamacoes recorrentes.
       - **Prioridade**: Alta - afeta segmento enterprise de alto valor. Requer investigacao de performance de query (adicao de indices, query otimizada, pre-agregacao de dados) como prioridade do proximo sprint.
+
+  - input: |
+      Botao de adicionar ao carrinho nao funciona no produto ID 1234.
+    output: |
+      ## User Story
+
+      **Como um** cliente que encontrou o produto ID 1234 que procurava e estava prestes a finalizar uma compra importante, mas ao clicar em "Adicionar ao Carrinho" nao obteve nenhuma resposta do sistema,
+      **Eu quero** conseguir adicionar o produto ID 1234 ao meu carrinho com um unico clique, recebendo confirmacao imediata de que o item foi reservado para mim,
+      **Para que** eu possa prosseguir com minha compra com confianca, sem o risco de perder o produto desejado por nao conseguir incluir no carrinho, e sem precisar tentar varias vezes sem saber se o sistema esta funcionando.
+
+      ## Criterios de Aceitacao
+
+      1. **Dado que** estou na pagina do produto ID 1234
+         **Quando** clico no botao "Adicionar ao Carrinho"
+         **Entao** o produto deve ser adicionado ao carrinho em ate 1 segundo e o contador do carrinho deve incrementar de N para N+1
+
+      2. **Dado que** o produto ID 1234 foi adicionado com sucesso ao carrinho
+         **Quando** a operacao e concluida
+         **Entao** devo ver uma confirmacao visual imediata (ex: badge animado no icone do carrinho ou toast "Produto adicionado!") em ate 500ms
+
+      3. **Dado que** estou na pagina do produto ID 1234
+         **Quando** clico em "Adicionar ao Carrinho"
+         **Entao** o botao deve entrar em estado desabilitado com feedback visual (spinner ou mudanca de cor) enquanto processa, impedindo cliques duplos
+
+      4. **Dado que** o produto ID 1234 esta esgotado
+         **Quando** acesso a pagina do produto
+         **Entao** o botao "Adicionar ao Carrinho" deve estar desabilitado e exibir "Produto indisponivel" em vez de permitir um clique sem resposta
+
+      5. **Dado que** ocorre erro tecnico ao adicionar o produto ao carrinho
+         **Quando** a requisicao falha
+         **Entao** devo ver a mensagem "Nao foi possivel adicionar o produto. Tente novamente." com botao para repetir a acao - nunca falha silenciosa
+
+      6. **Dado que** adiciono o produto ID 1234 ao carrinho com sucesso
+         **Quando** navego para o carrinho
+         **Entao** o produto ID 1234 deve aparecer listado com nome, preco e quantidade 1
+
+      ## Contexto Tecnico
+
+      - **Ambiente/Plataforma**: Loja online (todos os browsers)
+      - **Componente**: Botao "Adicionar ao Carrinho" na pagina de produto
+      - **Severidade**: Alta (bloqueia conversao de vendas)
+      - **Detalhes Tecnicos**: Produto especifico afetado: ID 1234. O clique no botao nao gera resposta visivel nem request ao backend. Outros produtos nao relatados como afetados.
+      - **Comportamento Atual**: Clique no botao "Adicionar ao Carrinho" do produto ID 1234 nao gera nenhum feedback - sem animacao, sem atualizacao do contador, sem adicao ao carrinho
+      - **Comportamento Esperado**: Produto adicionado ao carrinho em ate 1 segundo com confirmacao visual
+
+      ## Impacto e Prioridade
+
+      - **Usuarios Afetados**: Qualquer cliente que tenta comprar o produto ID 1234 - todos sao bloqueados de concluir a compra deste item especifico.
+      - **Impacto no Negocio**: Perda direta de conversoes e receita para o produto ID 1234. Clientes frustrados podem abandonar a loja e comprar em concorrentes.
+      - **Prioridade**: Alta - bloqueia completamente a compra do produto afetado. Correcao imediata necessaria para nao perder vendas.
