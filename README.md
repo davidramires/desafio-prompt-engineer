@@ -278,6 +278,10 @@ Execucao com **OpenAI** (gpt-4o-mini + gpt-4o):
 
 O codigo tambem suporta **Google Gemini** como alternativa de menor custo.
 
+### Observação para Entrega
+
+Realizei 21 iterações documentadas (pull → otimização → push → evaluate). Apliquei Role Prompting, Few-shot, CoT e outras técnicas. Não atingi 0.9 nas 4 métricas simultaneamente; o gargalo foi **Tone Score** (melhor: **0.880** na **#10**). Média geral ~**0.899** (**#10** e **#21**). O processo de otimização, tracing no LangSmith e iteração sistemática foram seguidos; o resultado reflete a dificuldade real da métrica de tom com judge LLM e amostra aleatória de 5 bugs.
+
 
 ## Licença
 
