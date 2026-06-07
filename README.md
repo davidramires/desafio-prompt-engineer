@@ -80,7 +80,7 @@ python src/push_prompts.py
 python src/evaluate.py
 ```
 
-> Repita os passos 4 a 7 até todas as métricas atingirem >= 0.9 (esperado: 3-5 iterações).
+> Repita os passos 4 a 7 até todas as métricas atingirem >= 0.9. Neste repositório foram realizadas **21 iteracoes** (ver [Resultados Finais](#resultados-finais)).
 
 ### Comandos Rápidos
 
@@ -174,31 +174,78 @@ Seis técnicas avançadas de Prompt Engineering foram aplicadas para otimizar a 
 
 ## Resultados Finais
 
-### Status
+### Status da Entrega
 
-> ⏳ Preencher após executar `python src/evaluate.py` e atingir todas as métricas >= 0.9
+| Item | Resultado |
+|------|-----------|
+| **Iteracoes realizadas** | **21** (registradas em `evaluations/history.json`) |
+| **Criterio de aprovacao** | 4 metricas >= 0.9 **simultaneamente** |
+| **Status final** | **REPROVADO** em todas as 21 iteracoes |
+| **Gargalo principal** | **Tone Score** (nao atingiu 0.9 de forma consistente) |
+| **Melhor media geral** | **~0.899** (iteracoes **#10** e **#21**) |
+
+Fluxo concluido: pull do prompt v1 → otimizacao do `bug_to_user_story_v2.yml` → push ao LangSmith → 21 ciclos de avaliacao com `python src/evaluate.py`.
 
 ### Link do LangSmith Dashboard
 
-O prompt otimizado está disponível publicamente no LangSmith Hub:
-- **Prompt**: `https://smith.langchain.com/prompts/bug_to_user_story_v2` *(atualizar com seu username)*
-- **Projeto**: `https://smith.langchain.com/projects/desafio-prompt-engineer` *(atualizar com seu username)*
+- **Prompt**: [bug_to_user_story_v2](https://smith.langchain.com/prompts/bug_to_user_story_v2)
+- **Projeto**: [desafio-prompt-engineer](https://smith.langchain.com/projects/desafio-prompt-engineer)
+- **Username**: `davidramirescuenca`
 
-### Scores Finais
+### As 2 Melhores Iteracoes
 
-> ⏳ Preencher após aprovação (todas as métricas >= 0.9)
+#### Iteracao #10 — melhor equilibrio (3 metricas >= 0.9)
 
-| Métrica | Score | Status |
-|---------|-------|--------|
-| Tone Score | - | ⏳ |
-| Acceptance Criteria Score | - | ⏳ |
-| User Story Format Score | - | ⏳ |
-| Completeness Score | - | ⏳ |
-| **Média** | - | ⏳ |
+| Metrica | Score | Meta | Status |
+|---------|-------|------|--------|
+| Tone Score | 0.880 | >= 0.9 | Falhou (-0.020) |
+| Acceptance Criteria Score | **0.905** | >= 0.9 | **OK** |
+| User Story Format Score | **0.904** | >= 0.9 | **OK** |
+| Completeness Score | **0.908** | >= 0.9 | **OK** |
+| **Media das 4 metricas** | **~0.899** | >= 0.9 | Falhou por Tone |
 
-### Screenshots das Avaliações
+**Destaque:** unica iteracao com **Tone mais alto (0.880)** e **3 de 4 metricas aprovadas**. Faltaram 0.02 no Tone para aprovacao total.
 
-> ⏳ Adicionar screenshots do dashboard do LangSmith mostrando as notas >= 0.9
+---
+
+#### Iteracao #21 — melhor resultado final (ultima iteracao)
+
+| Metrica | Score | Meta | Status |
+|---------|-------|------|--------|
+| Tone Score | 0.865 | >= 0.9 | Falhou |
+| Acceptance Criteria Score | 0.885 | >= 0.9 | Falhou (-0.015) |
+| User Story Format Score | **0.908** | >= 0.9 | **OK** |
+| Completeness Score | **0.936** | >= 0.9 | **OK** |
+| **Media das 4 metricas** | **~0.899** | >= 0.9 | Falhou por Tone e AC |
+
+**Destaque:** melhor **Completeness (0.936)** e **Format (0.908)** do processo; encerramento das 21 iteracoes com media igual a #10.
+
+---
+
+### Resumo Comparativo (#10 vs #21)
+
+| Metrica | #10 | #21 | Melhor |
+|---------|-----|-----|--------|
+| Tone Score | **0.880** | 0.865 | #10 |
+| Acceptance Criteria | **0.905** | 0.885 | #10 |
+| User Story Format | 0.904 | **0.908** | #21 |
+| Completeness | 0.908 | **0.936** | #21 |
+| **Media** | ~0.899 | ~0.899 | Empate |
+
+### Evolucao do Processo (21 iteracoes)
+
+| Marco | Iteracao | Tone | AC | Format | Complete | Media |
+|-------|----------|------|-----|--------|----------|-------|
+| Inicio | #1 | 0.828 | 0.872 | 0.907 | 0.868 | ~0.869 |
+| Referencia | #18 | 0.850 | 0.870 | 0.888 | 0.888 | ~0.874 |
+| **2a melhor** | **#10** | **0.880** | **0.905** | **0.904** | **0.908** | **~0.899** |
+| **Melhor final** | **#21** | 0.865 | 0.885 | **0.908** | **0.936** | **~0.899** |
+
+Historico completo (iteracoes #1 a #21): [`evaluations/history.json`](evaluations/history.json)
+
+### Screenshots das Avaliacoes
+
+> Inserir capturas de tela do terminal das iteracoes **#10** e **#21**.
 
 ### Tabela Comparativa: Prompt v1 (original) vs v2 (otimizado)
 
@@ -214,27 +261,22 @@ O prompt otimizado está disponível publicamente no LangSmith Hub:
 
 ### Configuração Final
 
-- **Provider**: Google Gemini (gratuito)
-- **Modelo de Geração**: gemini-2.5-flash
-- **Modelo de Avaliação**: gemini-2.5-flash
+- **Provider**: OpenAI
+- **Modelo de Geração**: gpt-4o-mini
+- **Modelo de Avaliação (judge)**: gpt-4o
+- **Amostra de avaliacao**: 5 bugs aleatorios (`EVAL_SAMPLE_SIZE=5`)
+- **Iteracoes documentadas**: 21 (ver `evaluations/history.json`)
 
 ### Nota sobre Custos
 
-Este projeto utiliza **Google Gemini**, que possui plano gratuito mais que suficiente para o desafio:
+Execucao com **OpenAI** (gpt-4o-mini + gpt-4o):
 
-| Limite do Plano Gratuito | Valor |
-|---|---|
-| Requisições por minuto | 15 |
-| Requisições por dia | 1.500 |
+| Item | Estimativa |
+|------|------------|
+| Custo por iteracao (5 bugs) | ~US$ 0.03–0.05 |
+| Total aproximado (21 iteracoes) | ~US$ 1–2 |
 
-O volume total de chamadas é de aproximadamente **75 por iteração** (15 bugs × 4 métricas + 15 gerações). Em 13 iterações, são ~975 chamadas — bem dentro do limite diário gratuito.
-
-| Modelo | Custo (se pago) |
-|---|---|
-| gemini-2.5-flash (geração e avaliação) | $0,075 / 1M tokens |
-
-> **Custo total estimado: $0** (plano gratuito cobre todo o desafio).
-> No pior caso, se ultrapassar o free tier: menos de **$0,10**.
+O codigo tambem suporta **Google Gemini** como alternativa de menor custo.
 
 
 ## Licença

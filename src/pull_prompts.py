@@ -73,7 +73,7 @@ def pull_prompt(prompt_name: str) -> dict:
     print(f"Prompt: {prompt_name}")
 
     client = Client()
-    prompt = client.pull_prompt(prompt_name)
+    prompt = client.pull_prompt(prompt_name, dangerously_pull_public_prompt=True)
     return prompt
 
 

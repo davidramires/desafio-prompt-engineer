@@ -1,4 +1,4 @@
-"""
+﻿"""
 Implementação COMPLETA de métricas customizadas para avaliação de prompts.
 RESOLUÇÃO DO DESAFIO
 
@@ -61,7 +61,7 @@ def extract_json_from_response(response_text: str) -> Dict[str, Any]:
                 pass
 
         # Se não conseguir extrair, retornar valores default
-        print(f"⚠️  Não foi possível extrair JSON da resposta: {response_text[:200]}...")
+        print(f"[AVISO]  Não foi possível extrair JSON da resposta: {response_text[:200]}...")
         return {"score": 0.0, "reasoning": "Erro ao processar resposta"}
 
 
@@ -149,7 +149,7 @@ NÃO adicione nenhum texto antes ou depois do JSON.
         }
 
     except Exception as e:
-        print(f"❌ Erro ao avaliar F1-Score: {e}")
+        print(f"[ERRO] Erro ao avaliar F1-Score: {e}")
         return {
             "score": 0.0,
             "precision": 0.0,
@@ -237,7 +237,7 @@ NÃO adicione nenhum texto antes ou depois do JSON.
         }
 
     except Exception as e:
-        print(f"❌ Erro ao avaliar Clarity: {e}")
+        print(f"[ERRO] Erro ao avaliar Clarity: {e}")
         return {
             "score": 0.0,
             "reasoning": f"Erro na avaliação: {str(e)}"
@@ -324,7 +324,7 @@ NÃO adicione nenhum texto antes ou depois do JSON.
         }
 
     except Exception as e:
-        print(f"❌ Erro ao avaliar Precision: {e}")
+        print(f"[ERRO] Erro ao avaliar Precision: {e}")
         return {
             "score": 0.0,
             "reasoning": f"Erro na avaliação: {str(e)}"
@@ -423,7 +423,7 @@ NÃO adicione nenhum texto antes ou depois do JSON.
         }
 
     except Exception as e:
-        print(f"❌ Erro ao avaliar Tone Score: {e}")
+        print(f"[ERRO] Erro ao avaliar Tone Score: {e}")
         return {
             "score": 0.0,
             "reasoning": f"Erro na avaliação: {str(e)}"
@@ -525,7 +525,7 @@ NÃO adicione nenhum texto antes ou depois do JSON.
         }
 
     except Exception as e:
-        print(f"❌ Erro ao avaliar Acceptance Criteria Score: {e}")
+        print(f"[ERRO] Erro ao avaliar Acceptance Criteria Score: {e}")
         return {
             "score": 0.0,
             "reasoning": f"Erro na avaliação: {str(e)}"
@@ -632,7 +632,7 @@ NÃO adicione nenhum texto antes ou depois do JSON.
         }
 
     except Exception as e:
-        print(f"❌ Erro ao avaliar User Story Format Score: {e}")
+        print(f"[ERRO] Erro ao avaliar User Story Format Score: {e}")
         return {
             "score": 0.0,
             "reasoning": f"Erro na avaliação: {str(e)}"
@@ -746,7 +746,7 @@ NÃO adicione nenhum texto antes ou depois do JSON.
         }
 
     except Exception as e:
-        print(f"❌ Erro ao avaliar Completeness Score: {e}")
+        print(f"[ERRO] Erro ao avaliar Completeness Score: {e}")
         return {
             "score": 0.0,
             "reasoning": f"Erro na avaliação: {str(e)}"
@@ -762,7 +762,7 @@ if __name__ == "__main__":
     print("=" * 70)
     print("TESTANDO MÉTRICAS CUSTOMIZADAS")
     print("=" * 70)
-    print(f"\n📊 Provider: {provider}")
+    print(f"\n Provider: {provider}")
     print(f"🤖 Modelo de Avaliação: {eval_model}\n")
 
     print("=" * 70)
@@ -829,5 +829,5 @@ Critérios de Aceitação:
     print(f"   Reasoning: {completeness_result['reasoning']}\n")
 
     print("=" * 70)
-    print("✅ TODOS OS TESTES CONCLUÍDOS!")
+    print("[APROVADO] TODOS OS TESTES CONCLUÍDOS!")
     print("=" * 70)

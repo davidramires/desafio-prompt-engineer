@@ -1,4 +1,4 @@
-"""
+﻿"""
 Funções auxiliares para o projeto de otimização de prompts.
 """
 
@@ -59,7 +59,7 @@ def print_error(message: str) -> None:
     Args:
         message: Mensagem de erro
     """
-    print(f"❌ {message}")
+    print(f"[ERRO] {message}")
 
 
 def print_success(message: str) -> None:
@@ -69,7 +69,7 @@ def print_success(message: str) -> None:
     Args:
         message: Mensagem de sucesso
     """
-    print(f"✓ {message}")
+    print(f"[OK] {message}")
 
 
 def load_yaml(file_path: str) -> Optional[Dict[str, Any]]:
@@ -87,13 +87,13 @@ def load_yaml(file_path: str) -> Optional[Dict[str, Any]]:
             data = yaml.safe_load(f)
         return data
     except FileNotFoundError:
-        print(f"❌ Arquivo não encontrado: {file_path}")
+        print(f"[ERRO] Arquivo não encontrado: {file_path}")
         return None
     except yaml.YAMLError as e:
-        print(f"❌ Erro ao parsear YAML: {e}")
+        print(f"[ERRO] Erro ao parsear YAML: {e}")
         return None
     except Exception as e:
-        print(f"❌ Erro ao carregar arquivo: {e}")
+        print(f"[ERRO] Erro ao carregar arquivo: {e}")
         return None
 
 
@@ -117,7 +117,7 @@ def save_yaml(data: Dict[str, Any], file_path: str) -> bool:
 
         return True
     except Exception as e:
-        print(f"❌ Erro ao salvar arquivo: {e}")
+        print(f"[ERRO] Erro ao salvar arquivo: {e}")
         return False
 
 
@@ -138,7 +138,7 @@ def check_env_vars(required_vars: list) -> bool:
             missing_vars.append(var)
 
     if missing_vars:
-        print("❌ Variáveis de ambiente faltando:")
+        print("[ERRO] Variáveis de ambiente faltando:")
         for var in missing_vars:
             print(f"   - {var}")
         print("\nConfigure-as no arquivo .env antes de continuar.")
@@ -158,7 +158,7 @@ def format_score(score: float, threshold: float = 0.9) -> str:
     Returns:
         String formatada com score e símbolo
     """
-    symbol = "✓" if score >= threshold else "✗"
+    symbol = "[OK]" if score >= threshold else "[X]"
     return f"{score:.2f} {symbol}"
 
 
@@ -324,7 +324,7 @@ def load_evaluation_history() -> list:
         with open(EVALUATION_HISTORY_PATH, 'r', encoding='utf-8') as f:
             return json.load(f)
     except (json.JSONDecodeError, Exception) as e:
-        print(f"⚠️  Aviso: Erro ao carregar histórico: {e}")
+        print(f"[AVISO]  Aviso: Erro ao carregar histórico: {e}")
         return []
 
 
@@ -364,7 +364,7 @@ def save_evaluation_result(result: Dict[str, Any]) -> bool:
 
         return True
     except Exception as e:
-        print(f"❌ Erro ao salvar histórico: {e}")
+        print(f"[ERRO] Erro ao salvar histórico: {e}")
         return False
 
 
@@ -393,9 +393,9 @@ def format_comparison(current: float, previous: float) -> str:
     diff = current - previous
 
     if diff > 0.001:
-        return f"↑ +{diff:.4f}"
+        return f"(+) +{diff:.4f}"
     elif diff < -0.001:
-        return f"↓ {diff:.4f}"
+        return f"(-) {diff:.4f}"
     else:
         return "= 0.0000"
 
@@ -409,11 +409,11 @@ def print_evaluation_comparison(current_scores: Dict[str, float], previous: Opti
         previous: Resultado da avaliação anterior (ou None)
     """
     if not previous:
-        print("\n📊 Primeira avaliação - sem histórico para comparar")
+        print("\n Primeira avaliação - sem histórico para comparar")
         return
 
     print("\n" + "=" * 60)
-    print("📊 COMPARAÇÃO COM AVALIAÇÃO ANTERIOR")
+    print(" COMPARAÇÃO COM AVALIAÇÃO ANTERIOR")
     print("=" * 60)
 
     prev_scores = previous.get('scores', {})
@@ -461,8 +461,8 @@ def print_evaluation_comparison(current_scores: Dict[str, float], previous: Opti
 
     # Resumo
     if improved_count > worsened_count:
-        print(f"✅ Progresso: {improved_count} métricas melhoraram, {worsened_count} pioraram")
+        print(f"[APROVADO] Progresso: {improved_count} métricas melhoraram, {worsened_count} pioraram")
     elif worsened_count > improved_count:
-        print(f"⚠️  Regressão: {worsened_count} métricas pioraram, {improved_count} melhoraram")
+        print(f"[AVISO]  Regressão: {worsened_count} métricas pioraram, {improved_count} melhoraram")
     else:
-        print(f"➡️  Estável: {improved_count} melhoraram, {worsened_count} pioraram")
+        print(f"->  Estável: {improved_count} melhoraram, {worsened_count} pioraram")

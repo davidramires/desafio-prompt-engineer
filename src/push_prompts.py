@@ -1,4 +1,4 @@
-"""
+﻿"""
 Push optimized prompts to LangSmith Prompt Hub.
 
 This module uploads the optimized prompt (v2) from local YAML file
@@ -217,14 +217,14 @@ def main() -> int:
         try:
             prompt_data = load_prompt_from_yaml(INPUT_PATH)
         except FileNotFoundError:
-            print(f"❌ Optimized prompt file not found at {INPUT_PATH}")
+            print(f"[ERRO] Optimized prompt file not found at {INPUT_PATH}")
             print("Please create the optimized prompt first.")
             return 1
 
         # Step 3: Validate prompt structure
         validation_errors = validate_prompt_structure(prompt_data)
         if validation_errors:
-            print("❌ Invalid prompt structure:")
+            print("[ERRO] Invalid prompt structure:")
             for error in validation_errors:
                 print(f"  - {error}")
             return 1
@@ -246,21 +246,21 @@ def main() -> int:
         except Exception as e:
             error_msg = str(e).lower()
             if 'auth' in error_msg or '401' in error_msg or '403' in error_msg:
-                print("❌ Authentication failed. Please check your LANGCHAIN_API_KEY in .env")
+                print("[ERRO] Authentication failed. Please check your LANGCHAIN_API_KEY in .env")
             elif 'connection' in error_msg or 'network' in error_msg or 'timeout' in error_msg:
-                print("❌ Unable to connect to LangSmith Hub. Please check your internet connection.")
+                print("[ERRO] Unable to connect to LangSmith Hub. Please check your internet connection.")
             else:
-                print(f"❌ Failed to push prompt: {e}")
+                print(f"[ERRO] Failed to push prompt: {e}")
             return 1
 
-        print("✓ Push completed successfully!")
+        print("[OK] Push completed successfully!")
         return 0
 
     except KeyboardInterrupt:
         print("\nOperation cancelled by user.")
         return 1
     except Exception as e:
-        print(f"❌ Unexpected error: {e}")
+        print(f"[ERRO] Unexpected error: {e}")
         return 1
 
 
